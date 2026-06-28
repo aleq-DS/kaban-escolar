@@ -1,0 +1,23 @@
+.kanban-column{
+
+    background:#ECEFF1;
+
+    width:280px;
+
+    min-height:500px;
+
+    border-radius:12px;
+
+    padding:20px;
+
+}
+
+.kanban-column h2{
+
+    text-align:center;
+
+    margin-bottom:20px;
+
+    color:#1565C0;
+
+}

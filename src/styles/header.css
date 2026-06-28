@@ -1,0 +1,79 @@
+.header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:16px 32px;
+
+    background:var(--primary);
+
+    color:var(--surface);
+
+    box-shadow:var(--shadow);
+
+}
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+
+.logo-image{
+
+    width:52px;
+
+    height:52px;
+
+}
+
+.logo h1{
+
+    margin:0;
+
+    font-size:26px;
+
+    line-height:1;
+
+}
+
+.logo span{
+
+    font-size:14px;
+
+    opacity:.9;
+
+}
+
+.login-button{
+
+    padding:10px 22px;
+
+    border:none;
+
+    border-radius:var(--border-radius);
+
+    background:var(--surface);
+
+    color:var(--primary);
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.login-button:hover{
+
+    transform:translateY(-2px);
+
+}

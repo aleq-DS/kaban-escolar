@@ -1,0 +1,87 @@
+.modal-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:1000;
+
+}
+
+.task-modal{
+
+    width:600px;
+
+    background:white;
+
+    border-radius:12px;
+
+    padding:30px;
+
+    box-shadow:0 4px 18px rgba(0,0,0,.3);
+
+    position:relative;
+
+}
+
+.btn-fechar{
+
+    position:absolute;
+
+    right:20px;
+
+    top:20px;
+
+    border:none;
+
+    background:none;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+}
+
+.modal-section{
+
+    margin-top:25px;
+
+}
+
+.modal-section h3{
+
+    margin-bottom:10px;
+
+    color:var(--primary);
+
+}
+
+.comentario-professor{
+
+    background:#FFF3CD;
+
+    border-left:5px solid #F9A825;
+
+    padding:15px;
+
+    border-radius:8px;
+
+}
+
+.historico-item{
+
+    border-left:3px solid var(--primary);
+
+    padding-left:15px;
+
+    margin-bottom:12px;
+
+}

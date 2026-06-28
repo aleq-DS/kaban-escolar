@@ -1,0 +1,61 @@
+.task-card{
+
+    background:white;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    margin-bottom:10px;
+
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+
+    cursor:pointer;
+
+}
+
+.task-card h4{
+
+    margin-bottom:8px;
+
+}
+
+.badge{
+
+    display:inline-block;
+
+    margin-top:15px;
+
+    padding:6px 10px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+}
+
+.aprovado{
+
+    background:#2E7D32;
+
+    color:white;
+
+}
+
+.aguardando{
+
+    background:#F9A825;
+
+    color:white;
+
+}
+
+.retorno{
+
+    background:#C62828;
+
+    color:white;
+
+}

@@ -1,0 +1,45 @@
+.kanban-page{
+
+    padding:30px;
+
+}
+
+.kanban-info{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+.kanban-info h1{
+
+    margin:0;
+
+    color:var(--text);
+
+}
+
+.kanban-info span{
+
+    color:var(--text-light);
+
+    font-size:14px;
+
+}
+
+.kanban-board{
+
+    display:flex;
+
+    gap:20px;
+
+    align-items:flex-start;
+
+    overflow-x:auto;
+
+}
