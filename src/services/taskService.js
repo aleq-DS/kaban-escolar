@@ -9,64 +9,78 @@ import {
     updateDoc 
 } from "firebase/firestore";
 
-// Nome da coleção no Firestore
 const COLECAO_TAREFAS = "tarefas";
 
 export const taskService = {
-    // 1. Buscar todas as tarefas de um grupo específico no Firestore
+    // 1. Buscar tarefas aceitando tanto ID numérico quanto ID texto (String) das novas escolas
     buscarPorGrupo: async (grupoId) => {
         try {
             const tarefasRef = collection(db, COLECAO_TAREFAS);
             
-            // Criamos uma query para filtrar as tarefas onde o campo 'grupo' seja igual ao ID do grupo
-            const q = query(tarefasRef, where("grupo", "==", Number(grupoId)));
-            const querySnapshot = await getDocs(q);
+            // Tentamos buscar como número E como string para não quebrar nenhum grupo legada
+            const qString = query(tarefasRef, where("grupo", "==", String(grupoId)));
+            const snapshotString = await getDocs(qString);
             
             const tarefas = [];
-            querySnapshot.forEach((doc) => {
-                // Mapeamos os dados do documento e injetamos o ID gerado pelo Firebase nele
-                tarefas.push({
-                    id: doc.id, 
-                    ...doc.data()
-                });
+            snapshotString.forEach((doc) => {
+                tarefas.push({ id: doc.id, ...doc.data() });
             });
+
+            if (tarefas.length === 0 && !isNaN(grupoId)) {
+                const qNum = query(tarefasRef, where("grupo", "==", Number(grupoId)));
+                const snapshotNum = await getDocs(qNum);
+                snapshotNum.forEach((doc) => {
+                    tarefas.push({ id: doc.id, ...doc.data() });
+                });
+            }
             
             return tarefas;
         } catch (error) {
-            console.error("Erro ao buscar tarefas no Firestore:", error);
+            console.error("Erro ao buscar tarefas:", error);
             throw error;
         }
     },
 
-    // 2. Salvar uma nova tarefa na nuvem
+    // 2. Salvar sem validações complexas (Criação limpa e leve)
     salvar: async (novaTarefa) => {
         try {
             const tarefasRef = collection(db, COLECAO_TAREFAS);
+            const { id, ...dadosParaSalvar } = novaTarefa; // Remove o id temporário local
             
-            // Removemos o 'id' temporário do objeto, pois o Firebase gerará o ID do documento
-            const { id, ...dadosParaSalvar } = novaTarefa;
-            
-            // Adiciona o documento na coleção 'tarefas'
             const docRef = await addDoc(tarefasRef, dadosParaSalvar);
             
-            // Retorna o objeto completo com o ID real gerado pela nuvem
+            // Retorna o ID REAL gerado pelo Firestore para o useKanban mapear certo na memória
             return {
                 id: docRef.id,
                 ...dadosParaSalvar
             };
         } catch (error) {
-            console.error("Erro ao salvar tarefa no Firestore:", error);
+            console.error("Erro ao salvar tarefa:", error);
             throw error;
         }
     },
 
-    // 3. Atualizar uma tarefa existente (Status, Comentários do Professor, etc.)
+    // 3. ONDE DEVE FICAR A VALIDAÇÃO: Na Atualização Técnica!
     atualizar: async (tarefaId, dadosAtualizados) => {
+        // Ignora checagens pesadas se for apenas uma movimentação de arrastar rápida (opcional),
+        // mas se os dados vierem do Modal, fazemos a validação rigorosa aqui:
+        if (dadosAtualizados.responsavel !== undefined) {
+            const resp = dadosAtualizados.responsavel?.trim() || "";
+            if (!resp || resp.toLowerCase() === "a definir") {
+                throw new Error("Membro executando precisa ser um nome válido.");
+            }
+        }
+
+        if (dadosAtualizados.descricao !== undefined && !dadosAtualizados.descricao?.trim()) {
+            throw new Error("A descrição do projeto/tarefa não pode ficar vazia.");
+        }
+
+        if (dadosAtualizados.dataEntrega !== undefined && !dadosAtualizados.dataEntrega) {
+            throw new Error("O prazo de entrega é obrigatório.");
+        }
+
         try {
-            // Criamos a referência direta para o documento específico usando o ID dele
             const tarefaDocRef = doc(db, COLECAO_TAREFAS, tarefaId);
-            
-            // Atualiza apenas os campos que foram modificados (incluindo o histórico atualizado)
             await updateDoc(tarefaDocRef, dadosAtualizados);
             
             return {
