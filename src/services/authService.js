@@ -11,7 +11,11 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 const provider = new GoogleAuthProvider();
 
 // Busca o e-mail do professor definido no seu arquivo .env
-const EMAIL_PROFESSOR = import.meta.env.VITE_PROFESSOR_EMAIL?.toLowerCase();
+// 1. Pega a string do .env, converte para minúsculas, separa por vírgula e remove espaços extras
+const EMAILS_PROFESSORES = (import.meta.env.VITE_PROFESSOR_EMAIL || "")
+    .toLowerCase()
+    .split(",")
+    .map(email => email.trim());
 
 /**
  * Função auxiliar para criar/atualizar o perfil do usuário no Firestore
@@ -28,7 +32,8 @@ const salvarPerfilNoFirestore = async (user, nomeCustomizado = null) => {
 
     const emailUser = user.email.toLowerCase();
     // Regra de segurança baseada no seu .env
-    const ehProfessor = emailUser === EMAIL_PROFESSOR;
+    // 2. Agora checa se o e-mail do usuário está DENTRO da lista de professores
+    const ehProfessor = EMAILS_PROFESSORES.includes(emailUser);
 
     const dadosPerfil = {
         uid: user.uid,
